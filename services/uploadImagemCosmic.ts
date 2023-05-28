@@ -31,11 +31,12 @@ const uploadImagemCosmic = async(req : any) => {
         //teste
         //console.log('uploadImagemCosmic url ', req.url);
         //console.log('uploadImagemCosmic media_object ', media_object);
-        if(req.url && req.url.includes('publicacoes')){
+        if(req.url && req.url.includes('publicacao')){
             return await bucketPublicacoes.addMedia({media : media_object});
         }else{
             return await bucketAvatares.addMedia({media : media_object});
         }
+        
     }
 }
 
