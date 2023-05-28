@@ -13,7 +13,7 @@ const handler = nc()
     .post(async (req: any, res: NextApiResponse<RespostaPadraoMsg>) => {
         try {
             const {userId } = req.query;
-            console.log('IDENTIFICAÇÃO DO USUARIO >>>>>>>>>> ', userId);
+            ///console.log('IDENTIFICAÇÃO DO USUARIO >>>>>>>>>> ', userId);
             const usuario = await UsuarioModel.findById(userId );
             if(!usuario){
                 return res.status(400).json({erro: 'usuario não encontrado'});
