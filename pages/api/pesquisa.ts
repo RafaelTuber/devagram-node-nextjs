@@ -28,6 +28,9 @@ const pesquisaEndPoint
                         $or: [{ nome: { $regex: filtro, $options: 'i' } },
                         { email: { $regex: filtro, $options: 'i' } }]                        
                     });
+                    usuarioEncontrados.forEach(userFound => {
+                        userFound.senha = null
+                    });
                     return res.status(200).json(usuarioEncontrados);
                 }
             }
