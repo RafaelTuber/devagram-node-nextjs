@@ -30,18 +30,18 @@ const likeEndPoint = async (req: NextApiRequest, res: NextApiResponse<RespostaPa
 
             // buscar array de likes na publicação
             // se o index for -1 sinal que ele nao curtiu a publicacao
-            const indexDoUsuarioNoLike = publicacao.like.findIndex((e : any) => e.toString() === usuario._id.toString());
+            const indexDoUsuarioNoLike = publicacao.likes.findIndex((e: any) => e.toString() === usuario._id.toString());
             //console.log('INDEX USUARIO NO LIKE =============', indexDoUsuarioNoLike);
             // se o index for > -1 sinal q ele ja curte a foto
-            if(indexDoUsuarioNoLike != -1){
-                publicacao.like.splice(indexDoUsuarioNoLike, 1);
-                await PublicacaoModel.findByIdAndUpdate({_id : publicacao._id}, publicacao);
-                return res.status(200).json({msg : 'Publicacao descurtida com sucesso'});
-            }else {
+            if (indexDoUsuarioNoLike != -1) {
+                publicacao.likes.splice(indexDoUsuarioNoLike, 1);
+                await PublicacaoModel.findByIdAndUpdate({ _id: publicacao._id }, publicacao);
+                return res.status(200).json({ msg: 'Publicacao descurtida com sucesso' });
+            } else {
                 // se o index for -1 sinal q ele nao curte a foto
-                publicacao.like.push(usuario._id);
-                await PublicacaoModel.findByIdAndUpdate({_id : publicacao._id}, publicacao);
-                return res.status(200).json({msg : 'Publicacao curtida com sucesso'});
+                publicacao.likes.push(usuario._id);
+                await PublicacaoModel.findByIdAndUpdate({ _id: publicacao._id }, publicacao);
+                return res.status(200).json({ msg: 'Publicacao curtida com sucesso' });
             }
         }
         return res.status(405).json({ erro: 'Metodo informado invalido' });
