@@ -2,8 +2,8 @@ import type {  NextApiRequest, NextApiResponse } from 'next';
 import type { RespostaPadraoMsg } from "../../types/RespostaPadraoMsg";
 import nc from 'next-connect';
 import {upload, uploadImagemCosmic} from '../../services/uploadImagemCosmic';
-import { conectarMongoDB } from '@/middlewares/conectarMongoDB';
-import { validarTokenJWT } from '@/middlewares/validarTokenJWT';
+import { conectarMongoDB } from '../../middlewares/conectarMongoDB';
+import { validarTokenJWT } from '../../middlewares/validarTokenJWT';
 import { PublicacaoModel } from '../../models/PublicacaoModel';
 import { UsuarioModel } from '../../models/UsuarioModel';
 
