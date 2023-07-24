@@ -3,7 +3,7 @@ import type { RespostaPadraoMsg } from '../../types/RespostaPadraoMsg';
 import { validarTokenJWT } from '../../middlewares/validarTokenJWT';
 import { conectarMongoDB } from '../../middlewares/conectarMongoDB';
 import { UsuarioModel } from '../../models/UsuarioModel';
-import { PublicacaoModel } from '../../models/PublicacaoModel';
+import { FeedModel } from '../../models/FeedModel';
 import { SeguidorModel } from '../../models/SeguidorModel';
 
 const feedEndpoint = async (req: NextApiRequest, res: NextApiResponse<RespostaPadraoMsg | any>) => {
@@ -18,7 +18,7 @@ const feedEndpoint = async (req: NextApiRequest, res: NextApiResponse<RespostaPa
                     res.status(400).json({ erro: 'Usuario não encontrado' });
                 }
                 // buscar publicacoes
-                const publicacoes = await PublicacaoModel
+                const publicacoes = await FeedModel
                     .find({ idUsuario: usuario._id })
                     .sort({ data: -1 });
                 return res.status(200).json(publicacoes);
@@ -33,7 +33,7 @@ const feedEndpoint = async (req: NextApiRequest, res: NextApiResponse<RespostaPa
                 // pegar id dos usuarios que sigo
                 const seguidores = await SeguidorModel.find({ usuarioId: userId });
                 const seguidoresIds = seguidores.map(s => s.usuarioSeguidoId);
-                const publicacoes = await PublicacaoModel.find({
+                const publicacoes = await FeedModel.find({
                     $or: [
                         { idUsuario: usuarioLogado._id },
                         { idUsuario: seguidoresIds }

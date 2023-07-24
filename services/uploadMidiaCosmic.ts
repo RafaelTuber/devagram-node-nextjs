@@ -21,16 +21,10 @@ const bucketPublicacoes = Cosmic.bucket({
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
-const uploadImagemCosmic = async (req: any) => {
+const uploadMidiaCosmic = async (req: any) => {
     //teste
     //console.log('uploadImagemCosmic upload imagemm', req.body);
     if (req?.file?.originalname) {
-
-        if (!req.file.originalname.includes('.png') &&
-            !req.file.originalname.includes('.jpg') &&
-            !req.file.originalname.includes('.jpeg')) {
-                throw new Error('Extensão da imagem invalida');
-        }
         const media_object = {
             originalname: req.file.originalname,
             buffer: req.file.buffer
@@ -39,7 +33,18 @@ const uploadImagemCosmic = async (req: any) => {
         //console.log('uploadImagemCosmic url ', req.url);
         //console.log('uploadImagemCosmic media_object ', media_object);
         if (req.url && req.url.includes('publicacao')) {
-            return await bucketPublicacoes.addMedia({ media: media_object, folder: 'feeds' });
+            if(req.body.type ==='feed' && req.file.originalname.includes('.png' || req.file.originalname.includes('.jpg') || req.file.originalname.includes('.jpeg'))){
+                return await bucketPublicacoes.addMedia({ media: media_object, folder: 'feeds' });
+            }if (req.body.type ==='story'){
+                return await bucketPublicacoes.addMedia({ media: media_object, folder: 'storys' });
+            }if (req.body.type ==='reel' && req.file.originalname.includes('.mp4')){
+                return await bucketPublicacoes.addMedia({ media: media_object, folder: 'reels' });
+            }
+            else{
+                console.log('nenhuma publicação criada');
+                throw new Error('Extensão da imagem invalida');
+            }
+            
         } else {
             return await bucketAvatares.addMedia({ media: media_object });
         }
@@ -47,4 +52,4 @@ const uploadImagemCosmic = async (req: any) => {
     }
 }
 
-export { upload, uploadImagemCosmic };
+export { upload, uploadMidiaCosmic };
