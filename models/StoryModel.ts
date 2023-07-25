@@ -7,6 +7,7 @@ const StorySchema = new Schema({
     likes : {type : Array, required : true, default : []},
     comentarios: {type : Array, require : true, default : []},
     usuariosQueVisualizaram: {type : Array, require : true, default : []},
+    contadorDeVisualizacoes: {type: Number, default: 0}
 });
 
 export const StoryModel = (mongoose.models.storys || mongoose.model('storys', StorySchema));

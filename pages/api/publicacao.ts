@@ -46,7 +46,7 @@ const handler = nc()
                     foto: midiaFeed.media.url,
                     data: new Date()
                 }
-                usuario.publicacao++;
+                usuario.publicacoes++;
                 await UsuarioModel.findByIdAndUpdate({ _id: usuario._id }, usuario);
 
                 await FeedModel.create(publicacaoFeed);
@@ -65,7 +65,7 @@ const handler = nc()
                     midia: MidiaStory.media.url,
                     data: new Date(),
                 }
-                usuario.story++;
+                usuario.storys++;
                 await UsuarioModel.findByIdAndUpdate({ _id: usuario._id }, usuario);
 
                 await StoryModel.create(story);
