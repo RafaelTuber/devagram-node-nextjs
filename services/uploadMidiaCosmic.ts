@@ -51,21 +51,21 @@ const uploadMidiaCosmic = async (req: any) => {
                 /*NEW VERSION*/
                 return await bucketDevagram.media.insertOne({
                     media: media_object,
-                    folder: "Feeds"
+                    folder: "feeds"
                 });
             } if (req.body.type === 'story') {
                 /* return await bucketPublicacoes.addMedia({ media: media_object, folder: 'storys' }); OLD VERSION*/
                 /*NEW VERSION*/
                 return await bucketDevagram.media.insertOne({
                     media: media_object,
-                    folder: "Storys"
+                    folder: "storys"
                 });
             } if (req.body.type === 'reel' && req.file.originalname.includes('.mp4')) {
                 /* return await bucketPublicacoes.addMedia({ media: media_object, folder: 'reels' }); OLD VERSION*/
                 /*NEW VERSION*/
                 return await bucketDevagram.media.insertOne({
                     media: media_object,
-                    folder: "Reels"
+                    folder: "reels"
                 });
             }
             else {
@@ -78,7 +78,7 @@ const uploadMidiaCosmic = async (req: any) => {
             /*NEW VERSION*/
             return await bucketDevagram.media.insertOne({
                 media: media_object,
-                folder: "Avatares",
+                folder: "avatares",
             });
         }
 

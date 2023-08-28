@@ -9,6 +9,11 @@ import { SeguidorModel } from '../../models/SeguidorModel';
 const StoryEndpoint = async (req: NextApiRequest, res: NextApiResponse<RespostaPadraoMsg | any>) => {
     try {
         if (req.method === 'GET') {
+            // Deletar histórias com mais de 24 horas
+            const umDiaAtras = new Date();
+            umDiaAtras.setHours(umDiaAtras.getHours() - 24);
+            await StoryModel.deleteMany({ data: { $lt: umDiaAtras } });
+
             if (req?.query?.id) {
                 //validadar usuario valido
                 const usuario = await UsuarioModel.findById(req?.query?.id);
@@ -22,12 +27,28 @@ const StoryEndpoint = async (req: NextApiRequest, res: NextApiResponse<RespostaP
                 return res.status(200).json(story);
             } else {
                 // pegar id do usuario logado
-                const { userId } = req.query;
+                const { userId, storyId } = req.query;
+
                 const usuarioLogado = await UsuarioModel.findById(userId);
                 if (!usuarioLogado) {
                     return res.status(400).json({ erro: 'Usuario nao encontrado' });
                 }
-
+                // Buscar story e verificar se o usuário já visualizou
+                if (storyId) {
+                    const story = await StoryModel.findById(storyId);
+                    if (story) {
+                        if (!story.usuariosQueVisualizaram.includes(usuarioLogado._id)) {
+                            await StoryModel.updateOne(
+                                { _id: storyId },
+                                {
+                                    $inc: { contadorDeVisualizacoes: 1 },
+                                    $addToSet: { usuariosQueVisualizaram: usuarioLogado._id }
+                                }
+                            );
+                        }
+                    }
+                }
+                //console.log(storyId);
                 // pegar id dos usuarios que sigo
                 const seguidores = await SeguidorModel.find({ usuarioId: userId });
                 const seguidoresIds = seguidores.map(s => s.usuarioSeguidoId);
