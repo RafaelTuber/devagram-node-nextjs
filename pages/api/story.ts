@@ -12,7 +12,8 @@ const StoryEndpoint = async (req: NextApiRequest, res: NextApiResponse<RespostaP
             // Deletar histórias com mais de 24 horas
             const umDiaAtras = new Date();
             umDiaAtras.setHours(umDiaAtras.getHours() - 24);
-            await StoryModel.deleteMany({ data: { $lt: umDiaAtras } });
+            await StoryModel.deleteMany({ data: { $lt: umDiaAtras } }); 
+            /*O operador $lt é apenas uma das muitas opções de operadores de comparação disponíveis no MongoDB para realizar consultas complexas e filtrar documentos de acordo com critérios específicos.*/
 
             if (req?.query?.id) {
                 //validadar usuario valido
