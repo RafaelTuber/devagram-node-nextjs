@@ -3,7 +3,7 @@ import type { RespostaPadraoMsg } from '../../types/RespostaPadraoMsg';
 import { validarTokenJWT } from '../../middlewares/validarTokenJWT';
 import { conectarMongoDB } from '../../middlewares/conectarMongoDB';
 import { UsuarioModel } from "../../models/UsuarioModel";
-import { PublicacaoModel } from "../../models/PublicacaoModel";
+import { FeedModel } from "../../models/FeedModel";
 
 const likeEndPoint = async (req: NextApiRequest, res: NextApiResponse<RespostaPadraoMsg>) => {
     try {
@@ -13,7 +13,7 @@ const likeEndPoint = async (req: NextApiRequest, res: NextApiResponse<RespostaPa
             const { id } = req.query;
             //console.log('ID PUBLICACAO =============', id);
 
-            const publicacao = await PublicacaoModel.findById(id);
+            const publicacao = await FeedModel.findById(id);
             //console.log('PUBLICACAO =============', publicacao);
 
             if (!id) {
@@ -35,12 +35,12 @@ const likeEndPoint = async (req: NextApiRequest, res: NextApiResponse<RespostaPa
             // se o index for > -1 sinal q ele ja curte a foto
             if (indexDoUsuarioNoLike != -1) {
                 publicacao.likes.splice(indexDoUsuarioNoLike, 1);
-                await PublicacaoModel.findByIdAndUpdate({ _id: publicacao._id }, publicacao);
+                await FeedModel.findByIdAndUpdate({ _id: publicacao._id }, publicacao);
                 return res.status(200).json({ msg: 'Publicacao descurtida com sucesso' });
             } else {
                 // se o index for -1 sinal q ele nao curte a foto
                 publicacao.likes.push(usuario._id);
-                await PublicacaoModel.findByIdAndUpdate({ _id: publicacao._id }, publicacao);
+                await FeedModel.findByIdAndUpdate({ _id: publicacao._id }, publicacao);
                 return res.status(200).json({ msg: 'Publicacao curtida com sucesso' });
             }
         }

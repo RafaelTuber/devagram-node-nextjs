@@ -4,7 +4,7 @@ import { validarTokenJWT } from '../../middlewares/validarTokenJWT';
 import { conectarMongoDB } from '../../middlewares/conectarMongoDB';
 import { UsuarioModel } from "../../models/UsuarioModel";
 import nc from 'next-connect';
-import { upload, uploadImagemCosmic } from '../../services/uploadImagemCosmic';
+import { upload, uploadMidiaCosmic } from '../../services/uploadMidiaCosmic';
 
 const handler = nc()
     .use(upload.single('file'))
@@ -25,7 +25,7 @@ const handler = nc()
 
             const { file } = req;
             if (file && file.originalname) {
-                const image = await uploadImagemCosmic(req);
+                const image = await uploadMidiaCosmic(req);
                 if (image && image.media && image.media.url) {
                     usuario.avatar = image.media.url;
                 }

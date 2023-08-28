@@ -4,7 +4,7 @@ import type {CadastroRequisicao} from '../../types/CadastroRequisicao';
 import {UsuarioModel} from '../../models/UsuarioModel';
 import {conectarMongoDB} from '../../middlewares/conectarMongoDB';
 import md5 from 'md5';
-import {upload, uploadImagemCosmic} from '../../services/uploadImagemCosmic';
+import {upload, uploadMidiaCosmic} from '../../services/uploadMidiaCosmic';
 import nc from 'next-connect';
 
 const handler = nc()
@@ -35,7 +35,7 @@ const handler = nc()
             }
 
             // enviar a imagem do multer para o cosmic
-            const image = await uploadImagemCosmic(req);
+            const image = await uploadMidiaCosmic(req);
             
             //teste
             //console.log('Teste de recebimento de imagem -------------- ',image);

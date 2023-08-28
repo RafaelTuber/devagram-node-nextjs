@@ -3,7 +3,7 @@ import type { RespostaPadraoMsg } from "../../types/RespostaPadraoMsg";
 import { validarTokenJWT } from '../../middlewares/validarTokenJWT';
 import { conectarMongoDB } from '../../middlewares/conectarMongoDB';
 import { UsuarioModel } from '../../models/UsuarioModel';
-import { PublicacaoModel } from '../../models/PublicacaoModel';
+import { FeedModel } from '../../models/FeedModel';
 
 const comentarioEndpoint = async (req: NextApiRequest, res: NextApiResponse<RespostaPadraoMsg>) => {
     try {
@@ -16,7 +16,7 @@ const comentarioEndpoint = async (req: NextApiRequest, res: NextApiResponse<Resp
                 return res.status(400).json({erro : 'Usuario nao encontrado'});
             }
             // id publicacao
-            const publicacao =  await PublicacaoModel.findById(id);
+            const publicacao =  await FeedModel.findById(id);
             if(!publicacao){
                 return res.status(400).json({erro : 'Publicacao nao encontrada'});
             }
@@ -33,7 +33,7 @@ const comentarioEndpoint = async (req: NextApiRequest, res: NextApiResponse<Resp
             }
 
             publicacao.comentarios.push(comentario);
-            await PublicacaoModel.findByIdAndUpdate({_id : publicacao._id}, publicacao);
+            await FeedModel.findByIdAndUpdate({_id : publicacao._id}, publicacao);
             return res.status(200).json({msg : 'Comentario adicionado com sucesso'});
         }
         return res.status(405).json({ erro: 'Metodo informado nao é valido' });

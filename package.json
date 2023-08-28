@@ -1,6 +1,7 @@
 {
   "name": "devagram-node-nextjs",
   "version": "0.1.0",
+  "//": "Este é um comentário no package.json sobre a dependencia old 'cosmicjs': '^4.3.1' substituida pela versão 'cosmicjs': '^4.3.1' juntamente com '@cosmicjs/sdk': '^1.0.9' ",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -9,9 +10,13 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@cosmicjs/sdk": "^1.0.9",
+    "@types/jsonwebtoken": "^9.0.1",
+    "@types/md5": "^2.3.2",
     "@types/node": "18.15.11",
     "@types/react": "18.0.33",
     "@types/react-dom": "18.0.11",
+    "cosmic": "^0.0.0",    
     "cosmicjs": "^4.3.1",
     "eslint": "8.37.0",
     "eslint-config-next": "13.2.4",
@@ -28,8 +33,6 @@
     "typescript": "5.0.3"
   },
   "devDependencies": {
-    "@types/jsonwebtoken": "^9.0.1",
-    "@types/md5": "^2.3.2",
     "@types/multer": "^1.4.7"
   }
 }

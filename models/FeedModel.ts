@@ -1,6 +1,6 @@
 import mongoose, {Schema} from "mongoose";
 
-const PublicacaoSchema = new Schema({
+const FeedSchema = new Schema({
     idUsuario: {type : String, require : true},
     descricao: {type : String, require : true},
     foto: {type : String, require : true},
@@ -9,4 +9,4 @@ const PublicacaoSchema = new Schema({
     comentarios: {type : Array, require : true, default : []}
 });
 
-export const PublicacaoModel = (mongoose.models.publicacoes || mongoose.model('publicacoes', PublicacaoSchema));
+export const FeedModel = (mongoose.models.feeds || mongoose.model('feeds', FeedSchema));
