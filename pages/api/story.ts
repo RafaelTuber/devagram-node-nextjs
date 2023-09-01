@@ -6,7 +6,7 @@ import { UsuarioModel } from '../../models/UsuarioModel';
 import { StoryModel } from '../../models/StoryModel';
 import { SeguidorModel } from '../../models/SeguidorModel';
 
-const StoryEndpoint = async (req: NextApiRequest, res: NextApiResponse<RespostaPadraoMsg | any>) => {
+const StoryEndPoint = async (req: NextApiRequest, res: NextApiResponse<RespostaPadraoMsg | any>) => {
     try {
         if (req.method === 'GET') {
             // Deletar histórias com mais de 24 horas
@@ -86,4 +86,4 @@ const StoryEndpoint = async (req: NextApiRequest, res: NextApiResponse<RespostaP
         res.status(400).json({ erro: 'Não foi possivel carregar o Story' });
     }
 };
-export default validarTokenJWT(conectarMongoDB(StoryEndpoint));
+export default validarTokenJWT(conectarMongoDB(StoryEndPoint));
