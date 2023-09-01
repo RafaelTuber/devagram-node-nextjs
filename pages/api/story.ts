@@ -13,7 +13,12 @@ const StoryEndpoint = async (req: NextApiRequest, res: NextApiResponse<RespostaP
             const umDiaAtras = new Date();
             umDiaAtras.setHours(umDiaAtras.getHours() - 24);
             await StoryModel.deleteMany({ data: { $lt: umDiaAtras } }); 
-            /*O operador $lt é apenas uma das muitas opções de operadores de comparação disponíveis no MongoDB para realizar consultas complexas e filtrar documentos de acordo com critérios específicos.*/
+            /*
+            * O operador $lt é um operador de comparação usado em consultas no MongoDB para verificar 
+            * se um valor é menor que outro valor. No contexto da sua pergunta, onde está sendo usado 
+            * data: { $lt: umDiaAtras }, isso significa que estamos buscando documentos em que o valor do campo 
+            * "data" seja menor que a data umDiaAtras.
+            */
 
             if (req?.query?.id) {
                 //validadar usuario valido
