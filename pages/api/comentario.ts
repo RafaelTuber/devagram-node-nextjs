@@ -3,43 +3,63 @@ import type { RespostaPadraoMsg } from "../../types/RespostaPadraoMsg";
 import { validarTokenJWT } from '../../middlewares/validarTokenJWT';
 import { conectarMongoDB } from '../../middlewares/conectarMongoDB';
 import { UsuarioModel } from '../../models/UsuarioModel';
-import { FeedModel } from '../../models/FeedModel';
+import { FeedModel } from '../../models/FeedModel'; // Importe o modelo apropriado para feed
+import { StoryModel } from '../../models/StoryModel'; // Importe o modelo apropriado para histórias
+import { ReelModel } from '../../models/ReelModel'; // Importe o modelo apropriado para reels
 
 const comentarioEndpoint = async (req: NextApiRequest, res: NextApiResponse<RespostaPadraoMsg>) => {
     try {
         // metodo http que estaremos utilizando
-        if(req.method === 'PUT'){
+        if (req.method === 'PUT') {
             // id usuario
-            const {userId, id} = req.query;
+            const { userId, idPub, type } = req.query;
             const usuarioLogado = await UsuarioModel.findById(userId);
-            if(!usuarioLogado){
-                return res.status(400).json({erro : 'Usuario nao encontrado'});
+            if (!usuarioLogado) {
+                return res.status(400).json({ erro: 'Usuário não encontrado' });
             }
-            // id publicacao
-            const publicacao =  await FeedModel.findById(id);
-            if(!publicacao){
-                return res.status(400).json({erro : 'Publicacao nao encontrada'});
+
+            let publicacao;
+
+            // Verificar o tipo (feed, story, reel)
+            if (type === 'feed') {
+                publicacao = await FeedModel.findById(idPub);
+            } else if (type === 'story') {
+                publicacao = await StoryModel.findById(idPub);
+            } else if (type === 'reel') {
+                publicacao = await ReelModel.findById(idPub);
             }
-            // id comentario
-            if(!req.body || !req.body.comentario
-                || req.body.comentario.length < 2){
-                return res.status(400).json({erro : 'Comentario nao e valido'});
+
+            if (!publicacao) {
+                return res.status(400).json({ erro: 'Publicação não encontrada' });
+            }
+
+            if (!req.body || !req.body.comentario || req.body.comentario.length < 2) {
+                return res.status(400).json({ erro: 'Comentário não é válido' });
             }
 
             const comentario = {
-                usuarioId : usuarioLogado._id,
-                nome : usuarioLogado.nome,
-                comentario : req.body.comentario
+                usuarioId: usuarioLogado._id,
+                nome: usuarioLogado.nome,
+                comentario: req.body.comentario
             }
 
             publicacao.comentarios.push(comentario);
-            await FeedModel.findByIdAndUpdate({_id : publicacao._id}, publicacao);
-            return res.status(200).json({msg : 'Comentario adicionado com sucesso'});
+
+            // Atualize o documento apropriado com base no tipo
+            if (type === 'feed') {
+                await FeedModel.findByIdAndUpdate({ _id: publicacao._id }, publicacao);
+            } else if (type === 'story') {
+                await StoryModel.findByIdAndUpdate({ _id: publicacao._id }, publicacao);
+            } else if (type === 'reel') {
+                await ReelModel.findByIdAndUpdate({ _id: publicacao._id }, publicacao);
+            }
+
+            return res.status(200).json({ msg: 'Comentário adicionado com sucesso' });
         }
-        return res.status(405).json({ erro: 'Metodo informado nao é valido' });
+        return res.status(405).json({ erro: 'Método informado não é válido' });
     } catch (e) {
         console.log(e);
-        return res.status(500).json({erro : 'Ocorreu erro ao adicionar comentario'});
+        return res.status(500).json({ erro: 'Ocorreu erro ao adicionar comentario' });
     }
 }
 
