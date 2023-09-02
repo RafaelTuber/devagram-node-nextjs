@@ -46,13 +46,19 @@ const uploadMidiaCosmic = async (req: any) => {
         //console.log('uploadImagemCosmic url ', req.url);
         //console.log('uploadImagemCosmic media_object ', media_object);
         if (req.url && req.url.includes('publicacao')) {
-            if (req.body.type === 'feed' && req.file.originalname.includes('.png' || req.file.originalname.includes('.jpg') || req.file.originalname.includes('.jpeg'))) {
+            if (req.body.type === 'feed' && (
+                req.file.originalname.endsWith('.png') ||
+                req.file.originalname.endsWith('.jpg') ||
+                req.file.originalname.endsWith('.jpeg')
+            )) {
                 /* return await bucketPublicacoes.addMedia({ media: media_object, folder: 'feeds' }); OLD VERSION*/
                 /*NEW VERSION*/
                 return await bucketDevagram.media.insertOne({
                     media: media_object,
                     folder: "feeds"
                 });
+
+                console.log(bucketDevagram);
             } if (req.body.type === 'story') {
                 /* return await bucketPublicacoes.addMedia({ media: media_object, folder: 'storys' }); OLD VERSION*/
                 /*NEW VERSION*/
