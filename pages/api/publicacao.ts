@@ -8,6 +8,7 @@ import { FeedModel } from '../../models/FeedModel';
 import { ReelModel } from '../../models/ReelModel';
 import { StoryModel } from '../../models/StoryModel';
 import { UsuarioModel } from '../../models/UsuarioModel';
+import { politicaCORS } from '../../middlewares/politicaCORS';
 
 
 const handler = nc()
@@ -107,4 +108,4 @@ export const config = {
     }
 }
 
-export default validarTokenJWT(conectarMongoDB(handler));
+export default politicaCORS(validarTokenJWT(conectarMongoDB(handler)));

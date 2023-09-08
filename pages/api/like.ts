@@ -6,6 +6,7 @@ import { ReelModel } from '../../models/ReelModel';
 import { FeedModel } from '../../models/FeedModel';
 import { StoryModel } from '../../models/StoryModel';
 import { UsuarioModel } from "../../models/UsuarioModel";
+import { politicaCORS } from "../../middlewares/politicaCORS";
 
 const likeEndPoint = async (req: NextApiRequest, res: NextApiResponse<RespostaPadraoMsg>) => {
     try {
@@ -60,4 +61,4 @@ const likeEndPoint = async (req: NextApiRequest, res: NextApiResponse<RespostaPa
     }
 }
 
-export default validarTokenJWT(conectarMongoDB(likeEndPoint));
+export default politicaCORS(validarTokenJWT(conectarMongoDB(likeEndPoint)));

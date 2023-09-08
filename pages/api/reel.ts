@@ -4,6 +4,7 @@ import { validarTokenJWT } from '../../middlewares/validarTokenJWT';
 import { conectarMongoDB } from '../../middlewares/conectarMongoDB';
 import { ReelModel } from '../../models/ReelModel';
 import { UsuarioModel } from '../../models/UsuarioModel';
+import { politicaCORS } from '../../middlewares/politicaCORS';
 
 const ReelEndPoint = async (req: NextApiRequest, res: NextApiResponse<RespostaPadraoMsg | any>) => {
     try {
@@ -59,4 +60,4 @@ const ReelEndPoint = async (req: NextApiRequest, res: NextApiResponse<RespostaPa
     }
 };
 
-export default validarTokenJWT(conectarMongoDB(ReelEndPoint));
+export default politicaCORS(validarTokenJWT(conectarMongoDB(ReelEndPoint)));

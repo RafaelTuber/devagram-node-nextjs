@@ -5,6 +5,7 @@ import { conectarMongoDB } from '../../middlewares/conectarMongoDB';
 import { UsuarioModel } from '../../models/UsuarioModel';
 import { StoryModel } from '../../models/StoryModel';
 import { SeguidorModel } from '../../models/SeguidorModel';
+import { politicaCORS } from '../../middlewares/politicaCORS';
 
 const StoryEndPoint = async (req: NextApiRequest, res: NextApiResponse<RespostaPadraoMsg | any>) => {
     try {
@@ -86,4 +87,4 @@ const StoryEndPoint = async (req: NextApiRequest, res: NextApiResponse<RespostaP
         res.status(400).json({ erro: 'Não foi possivel carregar o Story' });
     }
 };
-export default validarTokenJWT(conectarMongoDB(StoryEndPoint));
+export default politicaCORS(validarTokenJWT(conectarMongoDB(StoryEndPoint)));

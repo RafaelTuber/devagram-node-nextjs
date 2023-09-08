@@ -6,6 +6,7 @@ import { UsuarioModel } from '../../models/UsuarioModel';
 import { FeedModel } from '../../models/FeedModel'; // Importe o modelo apropriado para feed
 import { StoryModel } from '../../models/StoryModel'; // Importe o modelo apropriado para histórias
 import { ReelModel } from '../../models/ReelModel'; // Importe o modelo apropriado para reels
+import { politicaCORS } from '../../middlewares/politicaCORS';
 
 const comentarioEndpoint = async (req: NextApiRequest, res: NextApiResponse<RespostaPadraoMsg>) => {
     try {
@@ -63,4 +64,4 @@ const comentarioEndpoint = async (req: NextApiRequest, res: NextApiResponse<Resp
     }
 }
 
-export default validarTokenJWT(conectarMongoDB(comentarioEndpoint));
+export default politicaCORS(validarTokenJWT(conectarMongoDB(comentarioEndpoint)));
