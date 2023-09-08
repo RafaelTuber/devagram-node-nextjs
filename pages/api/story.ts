@@ -5,10 +5,22 @@ import { conectarMongoDB } from '../../middlewares/conectarMongoDB';
 import { UsuarioModel } from '../../models/UsuarioModel';
 import { StoryModel } from '../../models/StoryModel';
 import { SeguidorModel } from '../../models/SeguidorModel';
+import { politicaCORS } from '../../middlewares/politicaCORS';
 
-const StoryEndpoint = async (req: NextApiRequest, res: NextApiResponse<RespostaPadraoMsg | any>) => {
+const StoryEndPoint = async (req: NextApiRequest, res: NextApiResponse<RespostaPadraoMsg | any>) => {
     try {
         if (req.method === 'GET') {
+            // Deletar histórias com mais de 24 horas
+            const umDiaAtras = new Date();
+            umDiaAtras.setHours(umDiaAtras.getHours() - 24);
+            await StoryModel.deleteMany({ data: { $lt: umDiaAtras } }); 
+            /*
+            * O operador $lt é um operador de comparação usado em consultas no MongoDB para verificar 
+            * se um valor é menor que outro valor. No contexto da sua pergunta, onde está sendo usado 
+            * data: { $lt: umDiaAtras }, isso significa que estamos buscando documentos em que o valor do campo 
+            * "data" seja menor que a data umDiaAtras.
+            */
+
             if (req?.query?.id) {
                 //validadar usuario valido
                 const usuario = await UsuarioModel.findById(req?.query?.id);
@@ -22,12 +34,28 @@ const StoryEndpoint = async (req: NextApiRequest, res: NextApiResponse<RespostaP
                 return res.status(200).json(story);
             } else {
                 // pegar id do usuario logado
-                const { userId } = req.query;
+                const { userId, storyId } = req.query;
+
                 const usuarioLogado = await UsuarioModel.findById(userId);
                 if (!usuarioLogado) {
                     return res.status(400).json({ erro: 'Usuario nao encontrado' });
                 }
-
+                // Buscar story e verificar se o usuário já visualizou
+                if (storyId) {
+                    const story = await StoryModel.findById(storyId);
+                    if (story) {
+                        if (!story.usuariosQueVisualizaram.includes(usuarioLogado._id)) {
+                            await StoryModel.updateOne(
+                                { _id: storyId },
+                                {
+                                    $inc: { contadorDeVisualizacoes: 1 },
+                                    $addToSet: { usuariosQueVisualizaram: usuarioLogado._id }
+                                }
+                            );
+                        }
+                    }
+                }
+                //console.log(storyId);
                 // pegar id dos usuarios que sigo
                 const seguidores = await SeguidorModel.find({ usuarioId: userId });
                 const seguidoresIds = seguidores.map(s => s.usuarioSeguidoId);
@@ -59,4 +87,4 @@ const StoryEndpoint = async (req: NextApiRequest, res: NextApiResponse<RespostaP
         res.status(400).json({ erro: 'Não foi possivel carregar o Story' });
     }
 };
-export default validarTokenJWT(conectarMongoDB(StoryEndpoint));
+export default politicaCORS(validarTokenJWT(conectarMongoDB(StoryEndPoint)));

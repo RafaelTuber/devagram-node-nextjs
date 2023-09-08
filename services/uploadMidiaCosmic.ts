@@ -46,26 +46,32 @@ const uploadMidiaCosmic = async (req: any) => {
         //console.log('uploadImagemCosmic url ', req.url);
         //console.log('uploadImagemCosmic media_object ', media_object);
         if (req.url && req.url.includes('publicacao')) {
-            if (req.body.type === 'feed' && req.file.originalname.includes('.png' || req.file.originalname.includes('.jpg') || req.file.originalname.includes('.jpeg'))) {
+            if (req.body.type === 'feed' && (
+                req.file.originalname.endsWith('.png') ||
+                req.file.originalname.endsWith('.jpg') ||
+                req.file.originalname.endsWith('.jpeg')
+            )) {
                 /* return await bucketPublicacoes.addMedia({ media: media_object, folder: 'feeds' }); OLD VERSION*/
                 /*NEW VERSION*/
                 return await bucketDevagram.media.insertOne({
                     media: media_object,
-                    folder: "Feeds"
+                    folder: "feeds"
                 });
+
+                console.log(bucketDevagram);
             } if (req.body.type === 'story') {
                 /* return await bucketPublicacoes.addMedia({ media: media_object, folder: 'storys' }); OLD VERSION*/
                 /*NEW VERSION*/
                 return await bucketDevagram.media.insertOne({
                     media: media_object,
-                    folder: "Storys"
+                    folder: "storys"
                 });
             } if (req.body.type === 'reel' && req.file.originalname.includes('.mp4')) {
                 /* return await bucketPublicacoes.addMedia({ media: media_object, folder: 'reels' }); OLD VERSION*/
                 /*NEW VERSION*/
                 return await bucketDevagram.media.insertOne({
                     media: media_object,
-                    folder: "Reels"
+                    folder: "reels"
                 });
             }
             else {
@@ -78,7 +84,7 @@ const uploadMidiaCosmic = async (req: any) => {
             /*NEW VERSION*/
             return await bucketDevagram.media.insertOne({
                 media: media_object,
-                folder: "Avatares",
+                folder: "avatares",
             });
         }
 
